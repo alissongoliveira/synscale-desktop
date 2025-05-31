@@ -16,10 +16,7 @@ export default function ModalEmpresa({ visible, onClose }) {
   if (!visible) return null;
 
   return (
-    <div
-      className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center font-mono"
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center font-mono">
       <div
         className="bg-white w-[720px] rounded shadow-lg"
         onClick={(e) => e.stopPropagation()}
