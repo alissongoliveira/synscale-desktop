@@ -1,6 +1,7 @@
 import { User, Monitor, FileText, Database, Scale, LogOut } from "lucide-react";
 import SubMenu from "./SubMenu";
 import SubMenuRelatorios from "./SubMenuRelatorios";
+import SubMenuBases from "./SubMenuBases";
 import { useEffect, useRef, useState } from "react";
 
 const items = [
@@ -11,7 +12,7 @@ const items = [
     label: "Relatórios",
     hasSubMenu: "relatorios",
   },
-  { icon: <Database size={18} />, label: "Bases" },
+  { icon: <Database size={18} />, label: "Bases", hasSubMenu: "bases" },
   { icon: <Scale size={18} />, label: "Emissão de Pesagens" },
   { icon: <LogOut size={18} />, label: "Sair" },
 ];
@@ -36,7 +37,7 @@ export default function Sidebar({ isOpen, onClose }) {
   const handleItemClick = (label, hasSubMenu) => {
     if (hasSubMenu) {
       setIsCollapsed(true);
-      setActiveSubMenu(hasSubMenu); // "cadastros" ou "relatorios"
+      setActiveSubMenu(hasSubMenu); // "cadastros", "relatorios", "bases"
     } else {
       setIsCollapsed(false);
       setActiveSubMenu(null);
@@ -79,6 +80,10 @@ export default function Sidebar({ isOpen, onClose }) {
           visible={true}
           onClose={() => setActiveSubMenu(null)}
         />
+      )}
+
+      {activeSubMenu === "bases" && (
+        <SubMenuBases visible={true} onClose={() => setActiveSubMenu(null)} />
       )}
     </>
   );
