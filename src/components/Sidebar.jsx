@@ -1,8 +1,9 @@
+import { useEffect, useRef, useState } from "react";
 import { User, Monitor, FileText, Database, Scale, LogOut } from "lucide-react";
+
 import SubMenu from "./SubMenu";
 import SubMenuRelatorios from "./SubMenuRelatorios";
 import SubMenuBases from "./SubMenuBases";
-import { useEffect, useRef, useState } from "react";
 
 const items = [
   { icon: <User size={18} />, label: "Cadastros", hasSubMenu: "cadastros" },
@@ -20,28 +21,44 @@ const items = [
 export default function Sidebar({ isOpen, onClose }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [activeSubMenu, setActiveSubMenu] = useState(null);
-  const ref = useRef();
+
+  const sidebarRef = useRef();
+  const submenuRef = useRef();
+
+  const fecharTudo = () => {
+    setIsCollapsed(false);
+    setActiveSubMenu(null);
+    onClose();
+  };
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) {
-        setActiveSubMenu(null);
-        setIsCollapsed(false);
-        onClose();
+      const clickedOutsideSidebar =
+        sidebarRef.current && !sidebarRef.current.contains(e.target);
+
+      const clickedOutsideSubmenu =
+        !submenuRef.current || !submenuRef.current.contains(e.target);
+
+      if (clickedOutsideSidebar && clickedOutsideSubmenu) {
+        fecharTudo();
       }
     };
-    if (isOpen) document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen, onClose]);
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   const handleItemClick = (label, hasSubMenu) => {
     if (hasSubMenu) {
       setIsCollapsed(true);
-      setActiveSubMenu(hasSubMenu); // "cadastros", "relatorios", "bases"
+      setActiveSubMenu(hasSubMenu);
     } else {
-      setIsCollapsed(false);
-      setActiveSubMenu(null);
-      onClose();
+      fecharTudo();
     }
   };
 
@@ -49,10 +66,11 @@ export default function Sidebar({ isOpen, onClose }) {
 
   return (
     <>
+      {/* SIDEBAR PRINCIPAL */}
       <div
-        ref={ref}
-        className={`fixed top-[90px] left-0 z-40 ${
-          isCollapsed ? "w-16" : "w-64"
+        ref={sidebarRef}
+        className={`fixed top-[90px] left-0 ${
+          isCollapsed ? "w-16 z-10" : "w-64 z-40"
         } bg-white shadow transition-all duration-200`}
       >
         <ul className="divide-y divide-slate-200">
@@ -71,19 +89,19 @@ export default function Sidebar({ isOpen, onClose }) {
         </ul>
       </div>
 
+      {/* SUBMENUS */}
       {activeSubMenu === "cadastros" && (
-        <SubMenu visible={true} onClose={() => setActiveSubMenu(null)} />
+        <SubMenu visible={true} onClose={fecharTudo} ref={submenuRef} />
       )}
-
       {activeSubMenu === "relatorios" && (
         <SubMenuRelatorios
           visible={true}
-          onClose={() => setActiveSubMenu(null)}
+          onClose={fecharTudo}
+          ref={submenuRef}
         />
       )}
-
       {activeSubMenu === "bases" && (
-        <SubMenuBases visible={true} onClose={() => setActiveSubMenu(null)} />
+        <SubMenuBases visible={true} onClose={fecharTudo} ref={submenuRef} />
       )}
     </>
   );
