@@ -18,7 +18,12 @@ const items = [
   { icon: <LogOut size={18} />, label: "Sair" },
 ];
 
-export default function Sidebar({ isOpen, onClose }) {
+export default function Sidebar({
+  isOpen,
+  onClose,
+  onAbrirModalEmpresa,
+  onAbrirModalMonitoramento,
+}) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [activeSubMenu, setActiveSubMenu] = useState(null);
 
@@ -35,7 +40,6 @@ export default function Sidebar({ isOpen, onClose }) {
     const handleClickOutside = (e) => {
       const clickedOutsideSidebar =
         sidebarRef.current && !sidebarRef.current.contains(e.target);
-
       const clickedOutsideSubmenu =
         !submenuRef.current || !submenuRef.current.contains(e.target);
 
@@ -53,7 +57,28 @@ export default function Sidebar({ isOpen, onClose }) {
     };
   }, [isOpen]);
 
+  // log para confirmar se a prop chegou corretamente
+  console.log("Sidebar props:", {
+    onAbrirModalMonitoramento,
+    tipo: typeof onAbrirModalMonitoramento,
+  });
+
   const handleItemClick = (label, hasSubMenu) => {
+    console.log("Clicou em:", label);
+
+    if (label === "Monitoramento das Balanças") {
+      fecharTudo();
+      setTimeout(() => {
+        console.log("Tentando abrir modal de monitoramento");
+        if (typeof onAbrirModalMonitoramento === "function") {
+          onAbrirModalMonitoramento();
+        } else {
+          console.warn("onAbrirModalMonitoramento não é uma função.");
+        }
+      }, 50);
+      return;
+    }
+
     if (hasSubMenu) {
       setIsCollapsed(true);
       setActiveSubMenu(hasSubMenu);
@@ -66,7 +91,7 @@ export default function Sidebar({ isOpen, onClose }) {
 
   return (
     <>
-      {/* SIDEBAR PRINCIPAL */}
+      {/* SIDEBAR */}
       <div
         ref={sidebarRef}
         className={`fixed top-[90px] left-0 ${
