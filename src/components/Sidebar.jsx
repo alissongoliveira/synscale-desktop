@@ -1,11 +1,16 @@
 import { User, Monitor, FileText, Database, Scale, LogOut } from "lucide-react";
 import SubMenu from "./SubMenu";
+import SubMenuRelatorios from "./SubMenuRelatorios";
 import { useEffect, useRef, useState } from "react";
 
 const items = [
-  { icon: <User size={18} />, label: "Cadastros", hasSubMenu: true },
+  { icon: <User size={18} />, label: "Cadastros", hasSubMenu: "cadastros" },
   { icon: <Monitor size={18} />, label: "Monitoramento das Balanças" },
-  { icon: <FileText size={18} />, label: "Relatórios" },
+  {
+    icon: <FileText size={18} />,
+    label: "Relatórios",
+    hasSubMenu: "relatorios",
+  },
   { icon: <Database size={18} />, label: "Bases" },
   { icon: <Scale size={18} />, label: "Emissão de Pesagens" },
   { icon: <LogOut size={18} />, label: "Sair" },
@@ -13,15 +18,15 @@ const items = [
 
 export default function Sidebar({ isOpen, onClose }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [submenuVisible, setSubmenuVisible] = useState(false);
+  const [activeSubMenu, setActiveSubMenu] = useState(null);
   const ref = useRef();
 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (ref.current && !ref.current.contains(e.target)) {
-        setSubmenuVisible(false);
+        setActiveSubMenu(null);
         setIsCollapsed(false);
-        onClose(); // fecha a sidebar principal
+        onClose();
       }
     };
     if (isOpen) document.addEventListener("mousedown", handleClickOutside);
@@ -29,12 +34,12 @@ export default function Sidebar({ isOpen, onClose }) {
   }, [isOpen, onClose]);
 
   const handleItemClick = (label, hasSubMenu) => {
-    if (label === "Cadastros" && hasSubMenu) {
+    if (hasSubMenu) {
       setIsCollapsed(true);
-      setSubmenuVisible(true);
+      setActiveSubMenu(hasSubMenu); // "cadastros" ou "relatorios"
     } else {
-      setSubmenuVisible(false);
       setIsCollapsed(false);
+      setActiveSubMenu(null);
       onClose();
     }
   };
@@ -65,10 +70,16 @@ export default function Sidebar({ isOpen, onClose }) {
         </ul>
       </div>
 
-      <SubMenu
-        visible={submenuVisible}
-        onClose={() => setSubmenuVisible(false)}
-      />
+      {activeSubMenu === "cadastros" && (
+        <SubMenu visible={true} onClose={() => setActiveSubMenu(null)} />
+      )}
+
+      {activeSubMenu === "relatorios" && (
+        <SubMenuRelatorios
+          visible={true}
+          onClose={() => setActiveSubMenu(null)}
+        />
+      )}
     </>
   );
 }
