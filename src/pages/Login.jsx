@@ -1,17 +1,33 @@
 import { useState } from "react";
+import Toast from "../components/Toast";
 
 export default function Login() {
   const [usuario, setUsuario] = useState("");
   const [senha, setSenha] = useState("");
+  const [toast, setToast] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Login:", { usuario, senha });
-    // Aqui futuramente teremos logica de autenticação
+
+    if (usuario === "admin" && senha === "1234") {
+      setToast({ type: "success", message: "Login efetuado com sucesso!" });
+    } else {
+      setToast({ type: "error", message: "Usuário ou senha inválidos." });
+    }
+
+    setTimeout(() => setToast(null), 4000); // fechar após 4s
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#F1F4EF] font-mono">
+      {toast && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast(null)}
+        />
+      )}
+
       <div className="text-center mb-6">
         <img
           src="/logo.png"
@@ -19,6 +35,7 @@ export default function Login() {
           className="h-40 mx-auto mb-2"
         />
       </div>
+
       <form
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm"
