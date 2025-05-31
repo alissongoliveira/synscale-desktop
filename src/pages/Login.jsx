@@ -1,21 +1,26 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Toast from "../components/Toast";
 
 export default function Login() {
   const [usuario, setUsuario] = useState("");
   const [senha, setSenha] = useState("");
   const [toast, setToast] = useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (usuario === "admin" && senha === "1234") {
       setToast({ type: "success", message: "Login efetuado com sucesso!" });
+      setTimeout(() => {
+        setToast(null);
+        navigate("/home");
+      }, 1500);
     } else {
       setToast({ type: "error", message: "Usuário ou senha inválidos." });
+      setTimeout(() => setToast(null), 4000);
     }
-
-    setTimeout(() => setToast(null), 4000); // fechar após 4s
   };
 
   return (
