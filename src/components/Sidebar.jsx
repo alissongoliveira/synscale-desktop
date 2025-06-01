@@ -23,6 +23,7 @@ export default function Sidebar({
   onClose,
   onAbrirModalEmpresa,
   onAbrirModalMonitoramento,
+  onAbrirModalEmissaoPesagem,
 }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [activeSubMenu, setActiveSubMenu] = useState(null);
@@ -57,23 +58,26 @@ export default function Sidebar({
     };
   }, [isOpen]);
 
-  // log para confirmar se a prop chegou corretamente
-  console.log("Sidebar props:", {
-    onAbrirModalMonitoramento,
-    tipo: typeof onAbrirModalMonitoramento,
-  });
-
   const handleItemClick = (label, hasSubMenu) => {
     console.log("Clicou em:", label);
 
     if (label === "Monitoramento das Balanças") {
       fecharTudo();
       setTimeout(() => {
-        console.log("Tentando abrir modal de monitoramento");
+        console.log("Abrindo modal de monitoramento");
         if (typeof onAbrirModalMonitoramento === "function") {
           onAbrirModalMonitoramento();
-        } else {
-          console.warn("onAbrirModalMonitoramento não é uma função.");
+        }
+      }, 50);
+      return;
+    }
+
+    if (label === "Emissão de Pesagens") {
+      fecharTudo();
+      setTimeout(() => {
+        console.log("Abrindo modal de emissão de pesagem");
+        if (typeof onAbrirModalEmissaoPesagem === "function") {
+          onAbrirModalEmissaoPesagem();
         }
       }, 50);
       return;

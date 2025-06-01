@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import ModalEmpresa from "../modals/ModalEmpresa";
 import ModalMonitoramento from "../modals/ModalMonitoramento";
+import ModalEmissaoPesagem from "../modals/ModalEmissaoPesagem";
 import { ModalContext } from "../contexts/ModalContext";
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
   const [modalEmpresaAberto, setModalEmpresaAberto] = useState(false);
   const [modalMonitoramentoAberto, setModalMonitoramentoAberto] =
     useState(false);
+  const [modalEmissaoAberto, setModalEmissaoAberto] = useState(false);
 
   const abrirModalEmpresa = () => {
     console.log("abrirModalEmpresa");
@@ -19,6 +21,11 @@ export default function Home() {
   const abrirModalMonitoramento = () => {
     console.log("abrirModalMonitoramento");
     setModalMonitoramentoAberto(true);
+  };
+
+  const abrirModalEmissaoPesagem = () => {
+    console.log("abrirModalEmissaoPesagem");
+    setModalEmissaoAberto(true);
   };
 
   return (
@@ -32,6 +39,7 @@ export default function Home() {
           onClose={() => setMenuOpen(false)}
           onAbrirModalEmpresa={abrirModalEmpresa}
           onAbrirModalMonitoramento={abrirModalMonitoramento}
+          onAbrirModalEmissaoPesagem={abrirModalEmissaoPesagem}
         />
         <ModalEmpresa
           visible={modalEmpresaAberto}
@@ -40,6 +48,10 @@ export default function Home() {
         <ModalMonitoramento
           visible={modalMonitoramentoAberto}
           onClose={() => setModalMonitoramentoAberto(false)}
+        />
+        <ModalEmissaoPesagem
+          visible={modalEmissaoAberto}
+          onClose={() => setModalEmissaoAberto(false)}
         />
       </div>
     </ModalContext.Provider>
