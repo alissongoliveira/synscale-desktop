@@ -1,9 +1,11 @@
 import { X, Scale, Settings, Circle, ServerCrash } from "lucide-react";
 import { useState } from "react";
 import ModalEditarBalanca from "./ModalEditarBalanca";
+import ModalSolicitarComplemento from "./ModalSolicitacaoComplemento";
 
 export default function ModalMonitoramento({ visible, onClose }) {
   const [modalEditarAberto, setModalEditarAberto] = useState(false);
+  const [modalComplementoAberto, setModalComplementoAberto] = useState(false);
   const [balancaSelecionada, setBalancaSelecionada] = useState(null);
 
   if (!visible) return null;
@@ -13,8 +15,13 @@ export default function ModalMonitoramento({ visible, onClose }) {
     setModalEditarAberto(true);
   };
 
+  const abrirComplemento = (dados) => {
+    setBalancaSelecionada(dados);
+    setModalComplementoAberto(true);
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center font-mono">
+    <div className="fixed inset-0 z-50 flex items-center justify-center font-mono bg-black/30">
       <div
         className="bg-[#F1F4EF] w-[880px] min-h-[600px] rounded-md shadow-lg p-4 relative"
         onClick={(e) => e.stopPropagation()}
@@ -24,7 +31,7 @@ export default function ModalMonitoramento({ visible, onClose }) {
           PAINEL DE CONTROLE
           <button
             onClick={onClose}
-            className="absolute right-4 top-2 text-slate-800"
+            className="absolute right-4 top-2 text-slate-800 hover:scale-110 transition-transform"
           >
             <X size={18} />
           </button>
@@ -92,7 +99,15 @@ export default function ModalMonitoramento({ visible, onClose }) {
                 <Scale size={16} />
                 BALANÇA 0{n}
               </div>
-              <button className="bg-slate-800 text-white px-3 py-1 rounded text-sm">
+              <button
+                className="bg-slate-800 text-white px-3 py-1 rounded text-sm"
+                onClick={() =>
+                  abrirComplemento({
+                    nome: `BALANÇA 0${n}`,
+                    id: n,
+                  })
+                }
+              >
                 Complemento
               </button>
             </div>
@@ -119,10 +134,16 @@ export default function ModalMonitoramento({ visible, onClose }) {
         </div>
       </div>
 
-      {/* Modal de edição de balança */}
+      {/* Modais */}
       <ModalEditarBalanca
         visible={modalEditarAberto}
         onClose={() => setModalEditarAberto(false)}
+        balanca={balancaSelecionada}
+      />
+
+      <ModalSolicitarComplemento
+        visible={modalComplementoAberto}
+        onClose={() => setModalComplementoAberto(false)}
         balanca={balancaSelecionada}
       />
     </div>
