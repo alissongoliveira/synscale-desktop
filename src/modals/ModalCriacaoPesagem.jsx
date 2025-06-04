@@ -14,11 +14,13 @@ import {
 } from "lucide-react";
 import ModalCadastroCliente from "./ModalCadastroCliente";
 import ModalCadastroMotorista from "./ModalCadastroMotorista";
+import ModalCadastroVeiculo from "./ModalCadastroVeiculo";
 
 export default function ModalCriacaoPesagem({ onClose }) {
   const [mostrarCadastroCliente, setMostrarCadastroCliente] = useState(false);
   const [mostrarCadastroMotorista, setMostrarCadastroMotorista] =
     useState(false);
+  const [mostrarCadastroVeiculo, setMostrarCadastroVeiculo] = useState(false);
 
   return (
     <>
@@ -78,7 +80,11 @@ export default function ModalCriacaoPesagem({ onClose }) {
                   icon: <Truck size={16} />,
                   motorista: true,
                 },
-                { label: "Placa do Cavalo", icon: <Truck size={16} /> },
+                {
+                  label: "Placa do Cavalo",
+                  icon: <Truck size={16} />,
+                  veiculo: true,
+                },
                 { label: "Transportadora", icon: <Truck size={16} /> },
                 { label: "Produto", icon: <Truck size={16} /> },
               ].map((campo, idx) => (
@@ -101,6 +107,10 @@ export default function ModalCriacaoPesagem({ onClose }) {
                     </button>
                   ) : campo.motorista ? (
                     <button onClick={() => setMostrarCadastroMotorista(true)}>
+                      <FolderPlus size={16} />
+                    </button>
+                  ) : campo.veiculo ? (
+                    <button onClick={() => setMostrarCadastroVeiculo(true)}>
                       <FolderPlus size={16} />
                     </button>
                   ) : (
@@ -139,6 +149,11 @@ export default function ModalCriacaoPesagem({ onClose }) {
       {mostrarCadastroMotorista && (
         <ModalCadastroMotorista
           onClose={() => setMostrarCadastroMotorista(false)}
+        />
+      )}
+      {mostrarCadastroVeiculo && (
+        <ModalCadastroVeiculo
+          onClose={() => setMostrarCadastroVeiculo(false)}
         />
       )}
     </>
