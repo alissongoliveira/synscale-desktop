@@ -15,12 +15,15 @@ import {
 import ModalCadastroCliente from "./ModalCadastroCliente";
 import ModalCadastroMotorista from "./ModalCadastroMotorista";
 import ModalCadastroVeiculo from "./ModalCadastroVeiculo";
+import ModalCadastroTransportadora from "./ModalCadastroTransportadora";
 
 export default function ModalCriacaoPesagem({ onClose }) {
   const [mostrarCadastroCliente, setMostrarCadastroCliente] = useState(false);
   const [mostrarCadastroMotorista, setMostrarCadastroMotorista] =
     useState(false);
   const [mostrarCadastroVeiculo, setMostrarCadastroVeiculo] = useState(false);
+  const [mostrarCadastroTransportadora, setMostrarCadastroTransportadora] =
+    useState(false);
 
   return (
     <>
@@ -85,7 +88,11 @@ export default function ModalCriacaoPesagem({ onClose }) {
                   icon: <Truck size={16} />,
                   veiculo: true,
                 },
-                { label: "Transportadora", icon: <Truck size={16} /> },
+                {
+                  label: "Transportadora",
+                  icon: <Truck size={16} />,
+                  transportadora: true,
+                },
                 { label: "Produto", icon: <Truck size={16} /> },
               ].map((campo, idx) => (
                 <div
@@ -111,6 +118,12 @@ export default function ModalCriacaoPesagem({ onClose }) {
                     </button>
                   ) : campo.veiculo ? (
                     <button onClick={() => setMostrarCadastroVeiculo(true)}>
+                      <FolderPlus size={16} />
+                    </button>
+                  ) : campo.transportadora ? (
+                    <button
+                      onClick={() => setMostrarCadastroTransportadora(true)}
+                    >
                       <FolderPlus size={16} />
                     </button>
                   ) : (
@@ -154,6 +167,11 @@ export default function ModalCriacaoPesagem({ onClose }) {
       {mostrarCadastroVeiculo && (
         <ModalCadastroVeiculo
           onClose={() => setMostrarCadastroVeiculo(false)}
+        />
+      )}
+      {mostrarCadastroTransportadora && (
+        <ModalCadastroTransportadora
+          onClose={() => setMostrarCadastroTransportadora(false)}
         />
       )}
     </>
