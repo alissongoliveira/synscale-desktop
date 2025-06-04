@@ -15,6 +15,7 @@ import ModalCadastroMotorista from "./ModalCadastroMotorista";
 import ModalCadastroVeiculo from "./ModalCadastroVeiculo";
 import ModalCadastroTransportadora from "./ModalCadastroTransportadora";
 import ModalCadastroProduto from "./ModalCadastroProduto";
+import Toast from "../components/Toast";
 
 export default function ModalCriacaoPesagem({ onClose }) {
   const [mostrarCadastroCliente, setMostrarCadastroCliente] = useState(false);
@@ -24,6 +25,7 @@ export default function ModalCriacaoPesagem({ onClose }) {
   const [mostrarCadastroTransportadora, setMostrarCadastroTransportadora] =
     useState(false);
   const [mostrarCadastroProduto, setMostrarCadastroProduto] = useState(false);
+  const [toast, setToast] = useState(null);
 
   const [pesoEntrada, setPesoEntrada] = useState(0);
   const [pesoSaida, setPesoSaida] = useState(0);
@@ -31,13 +33,15 @@ export default function ModalCriacaoPesagem({ onClose }) {
   const podeEmitir = pesoEntrada > 0 && pesoSaida > 0;
 
   const handleGrava = () => {
-    // lógica para gravar pré-pesagem
-    console.log("Gravou pré-pesagem:", { pesoEntrada, pesoSaida });
+    // lógica para gravar
+    console.log("Pré-pesagem gravada:", { pesoEntrada, pesoSaida });
+    setToast({ type: "success", message: "Pré-pesagem gravada com sucesso!" });
   };
 
   const handleEmitir = () => {
-    // lógica para emitir a pesagem
-    console.log("Emitiu pesagem:", { pesoEntrada, pesoSaida });
+    // lógica para emitir
+    console.log("Pesagem emitida:", { pesoEntrada, pesoSaida });
+    setToast({ type: "success", message: "Pesagem emitida com sucesso!" });
   };
 
   return (
@@ -221,6 +225,13 @@ export default function ModalCriacaoPesagem({ onClose }) {
       {mostrarCadastroProduto && (
         <ModalCadastroProduto
           onClose={() => setMostrarCadastroProduto(false)}
+        />
+      )}
+      {toast && (
+        <Toast
+          type={toast.type}
+          message={toast.message}
+          onClose={() => setToast(null)}
         />
       )}
     </>
