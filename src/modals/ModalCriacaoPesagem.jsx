@@ -13,9 +13,12 @@ import {
   Plus,
 } from "lucide-react";
 import ModalCadastroCliente from "./ModalCadastroCliente";
+import ModalCadastroMotorista from "./ModalCadastroMotorista";
 
 export default function ModalCriacaoPesagem({ onClose }) {
   const [mostrarCadastroCliente, setMostrarCadastroCliente] = useState(false);
+  const [mostrarCadastroMotorista, setMostrarCadastroMotorista] =
+    useState(false);
 
   return (
     <>
@@ -70,7 +73,11 @@ export default function ModalCriacaoPesagem({ onClose }) {
             <div className="space-y-2">
               {[
                 { label: "Cliente", icon: <User size={16} />, cliente: true },
-                { label: "Motorista", icon: <Truck size={16} /> },
+                {
+                  label: "Motorista",
+                  icon: <Truck size={16} />,
+                  motorista: true,
+                },
                 { label: "Placa do Cavalo", icon: <Truck size={16} /> },
                 { label: "Transportadora", icon: <Truck size={16} /> },
                 { label: "Produto", icon: <Truck size={16} /> },
@@ -90,6 +97,10 @@ export default function ModalCriacaoPesagem({ onClose }) {
                   </button>
                   {campo.cliente ? (
                     <button onClick={() => setMostrarCadastroCliente(true)}>
+                      <FolderPlus size={16} />
+                    </button>
+                  ) : campo.motorista ? (
+                    <button onClick={() => setMostrarCadastroMotorista(true)}>
                       <FolderPlus size={16} />
                     </button>
                   ) : (
@@ -122,6 +133,12 @@ export default function ModalCriacaoPesagem({ onClose }) {
       {mostrarCadastroCliente && (
         <ModalCadastroCliente
           onClose={() => setMostrarCadastroCliente(false)}
+        />
+      )}
+
+      {mostrarCadastroMotorista && (
+        <ModalCadastroMotorista
+          onClose={() => setMostrarCadastroMotorista(false)}
         />
       )}
     </>
