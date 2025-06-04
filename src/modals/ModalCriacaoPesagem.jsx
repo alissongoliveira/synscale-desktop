@@ -9,8 +9,6 @@ import {
   Truck,
   Search,
   FolderPlus,
-  Lock,
-  Plus,
 } from "lucide-react";
 import ModalCadastroCliente from "./ModalCadastroCliente";
 import ModalCadastroMotorista from "./ModalCadastroMotorista";
@@ -26,6 +24,21 @@ export default function ModalCriacaoPesagem({ onClose }) {
   const [mostrarCadastroTransportadora, setMostrarCadastroTransportadora] =
     useState(false);
   const [mostrarCadastroProduto, setMostrarCadastroProduto] = useState(false);
+
+  const [pesoEntrada, setPesoEntrada] = useState(0);
+  const [pesoSaida, setPesoSaida] = useState(0);
+  const pesoLiquido = pesoSaida - pesoEntrada;
+  const podeEmitir = pesoEntrada > 0 && pesoSaida > 0;
+
+  const handleGrava = () => {
+    // lógica para gravar pré-pesagem
+    console.log("Gravou pré-pesagem:", { pesoEntrada, pesoSaida });
+  };
+
+  const handleEmitir = () => {
+    // lógica para emitir a pesagem
+    console.log("Emitiu pesagem:", { pesoEntrada, pesoSaida });
+  };
 
   return (
     <>
@@ -141,30 +154,55 @@ export default function ModalCriacaoPesagem({ onClose }) {
               ))}
             </div>
 
-            {/* Coluna Direita */}
+            {/* Coluna Direita - Pesos */}
             <div className="space-y-2 text-sm">
-              <Peso label="Peso de Entrada" valor={21500} cor="text-red-500" />
-              <Peso label="Peso de Saída" valor={60000} cor="text-yellow-500" />
-              <Peso label="Peso Líquido" valor={38500} cor="text-green-600" />
+              <CampoPeso
+                label="Peso de Entrada"
+                valor={pesoEntrada}
+                setValor={setPesoEntrada}
+                cor="text-red-500"
+              />
+              <CampoPeso
+                label="Peso de Saída"
+                valor={pesoSaida}
+                setValor={setPesoSaida}
+                cor="text-yellow-500"
+              />
+              <CampoEstaticoPeso
+                label="Peso Líquido"
+                valor={pesoLiquido}
+                cor="text-green-600"
+              />
             </div>
           </div>
 
-          {/* Botão Gravar */}
+          {/* Botão principal */}
           <div className="mt-6 flex justify-center">
-            <button className="bg-slate-800 text-white px-8 py-2 rounded text-sm shadow">
-              Grava
-            </button>
+            {podeEmitir ? (
+              <button
+                onClick={handleEmitir}
+                className="bg-green-700 text-white px-8 py-2 rounded text-sm shadow"
+              >
+                Emitir
+              </button>
+            ) : (
+              <button
+                onClick={handleGrava}
+                className="bg-slate-800 text-white px-8 py-2 rounded text-sm shadow"
+              >
+                Grava
+              </button>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Modal de Cadastro de Cliente */}
+      {/* Modais de cadastro */}
       {mostrarCadastroCliente && (
         <ModalCadastroCliente
           onClose={() => setMostrarCadastroCliente(false)}
         />
       )}
-
       {mostrarCadastroMotorista && (
         <ModalCadastroMotorista
           onClose={() => setMostrarCadastroMotorista(false)}
@@ -189,6 +227,8 @@ export default function ModalCriacaoPesagem({ onClose }) {
   );
 }
 
+// Componentes auxiliares
+
 const CampoEstatico = ({ icon, text }) => (
   <div className="flex items-center bg-gray-100 p-2 rounded gap-2 text-sm">
     {icon}
@@ -196,13 +236,21 @@ const CampoEstatico = ({ icon, text }) => (
   </div>
 );
 
-const Peso = ({ label, valor, cor }) => (
+const CampoPeso = ({ label, valor, setValor, cor }) => (
   <div className="flex items-center justify-between bg-gray-100 p-2 rounded">
     <span>{label}:</span>
-    <div className="flex items-center gap-1">
-      <span className={`font-semibold ${cor}`}>{valor}</span>
-      <Plus size={14} className="text-gray-500" />
-      <Lock size={14} className="text-gray-500" />
-    </div>
+    <input
+      type="number"
+      value={valor}
+      onChange={(e) => setValor(Number(e.target.value))}
+      className={`text-right w-24 bg-transparent outline-none font-semibold ${cor}`}
+    />
+  </div>
+);
+
+const CampoEstaticoPeso = ({ label, valor, cor }) => (
+  <div className="flex items-center justify-between bg-gray-100 p-2 rounded">
+    <span>{label}:</span>
+    <span className={`font-semibold ${cor}`}>{valor}</span>
   </div>
 );
