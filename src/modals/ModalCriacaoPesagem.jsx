@@ -16,6 +16,7 @@ import ModalCadastroCliente from "./ModalCadastroCliente";
 import ModalCadastroMotorista from "./ModalCadastroMotorista";
 import ModalCadastroVeiculo from "./ModalCadastroVeiculo";
 import ModalCadastroTransportadora from "./ModalCadastroTransportadora";
+import ModalCadastroProduto from "./ModalCadastroProduto";
 
 export default function ModalCriacaoPesagem({ onClose }) {
   const [mostrarCadastroCliente, setMostrarCadastroCliente] = useState(false);
@@ -24,6 +25,7 @@ export default function ModalCriacaoPesagem({ onClose }) {
   const [mostrarCadastroVeiculo, setMostrarCadastroVeiculo] = useState(false);
   const [mostrarCadastroTransportadora, setMostrarCadastroTransportadora] =
     useState(false);
+  const [mostrarCadastroProduto, setMostrarCadastroProduto] = useState(false);
 
   return (
     <>
@@ -93,7 +95,7 @@ export default function ModalCriacaoPesagem({ onClose }) {
                   icon: <Truck size={16} />,
                   transportadora: true,
                 },
-                { label: "Produto", icon: <Truck size={16} /> },
+                { label: "Produto", icon: <Truck size={16} />, produto: true },
               ].map((campo, idx) => (
                 <div
                   key={idx}
@@ -124,6 +126,10 @@ export default function ModalCriacaoPesagem({ onClose }) {
                     <button
                       onClick={() => setMostrarCadastroTransportadora(true)}
                     >
+                      <FolderPlus size={16} />
+                    </button>
+                  ) : campo.produto ? (
+                    <button onClick={() => setMostrarCadastroProduto(true)}>
                       <FolderPlus size={16} />
                     </button>
                   ) : (
@@ -172,6 +178,11 @@ export default function ModalCriacaoPesagem({ onClose }) {
       {mostrarCadastroTransportadora && (
         <ModalCadastroTransportadora
           onClose={() => setMostrarCadastroTransportadora(false)}
+        />
+      )}
+      {mostrarCadastroProduto && (
+        <ModalCadastroProduto
+          onClose={() => setMostrarCadastroProduto(false)}
         />
       )}
     </>
